@@ -31,13 +31,6 @@ type PlayerResponse struct {
 	} `json:"paging"`
 }
 
-type BattleLogResponse struct {
-	BattleLogs []Battle `json:"items"`
-	Paging struct {
-		Cursors struct{} `json:"cursors"`
-	} `json:"paging"`
-}
-
 type OwnedBrawler struct {
   	ID       		int 	  	`json:"id"`
    	Name     		string 	    `json:"name"`
@@ -98,10 +91,10 @@ func (c *Client) GetPlayerBattlelog(tag string) (*[]Battle, error){
 		return nil, err
 	}
 	defer resp.Body.Close()
-	var battlelog []Battle
+	var battlelog BattleLogResponse
 	err = json.NewDecoder(resp.Body).Decode(&battlelog)
 	if err != nil {
 		return nil, err
 	}
-	return &battlelog, nil
+	return &battlelog.BattleLogs, nil
 }

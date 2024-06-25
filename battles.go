@@ -1,8 +1,15 @@
 package brawlstars
 
+type BattleLogResponse struct {
+	BattleLogs []Battle `json:"items"`
+	Paging struct {
+		Cursors struct{} `json:"cursors"`
+	} `json:"paging"`
+}
+
 type Battle struct {
   Time  string     `json:"battleTime"`
-  Event Event      `json:"event"`
+  Event *Event      `json:"event,omitempty"`
   Info  BattleInfo `json:"battle"`
 }
 
