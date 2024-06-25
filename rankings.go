@@ -28,7 +28,7 @@ type LeaderboardClub struct {
 }
 
 func (c *Client) GetCountryLeaderboardPlayers(countryCode string) ([]LeaderboardPlayer, error) {
-	url := fmt.Sprintf("https://api.brawlstars.com/v1/rankings/%s/players", countryCode)
+	url := fmt.Sprintf("https://bsproxy.royaleapi.dev/v1/rankings/%s/players", countryCode)
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, err

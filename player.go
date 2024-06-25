@@ -1,17 +1,27 @@
 package brawlstars
 
 import (
-	"net/http"
 	"encoding/json"
+	"fmt"
+	"net/http"
+	"net/url"
 )
 type Player struct {
-	Tag             string 		   `json:"tag"`
-	Name            string 		   `json:"name"`
-  	NameColor       string 		   `json:"nameColor"`
-   	Icon            PlayerIcon 	   `json:"icon"`
-    Stats           Stats 		   `json:"stats"`
-    Club            PlayerClub 	   `json:"club"`
-    Brawlers        []OwnedBrawler `json:"brawlers"`
+	Tag             	 string 		`json:"tag"`
+	Name            	 string 		`json:"name"`
+  	NameColor      	 	 string 		`json:"nameColor"`
+   	Icon            	 PlayerIcon 	`json:"icon"`
+   	Trophies             int 			`json:"trophies"`
+    HighestTrophies      int 			`json:"highestTrophies"`
+    ExpLevel             int 			`json:"expLevel"`
+    ExpPoints            int 			`json:"expPoints"`
+    TeamVictories        int 			`json:"3vs3Victories"`
+    SoloVictories        int 			`json:"soloVictories"`
+   	DuoVictories         int 			`json:"duoVictories"`
+	BestRumbleTime       int 			`json:"bestRoboRumbleTime"`
+	BestTimeAsBigBrawler int 			`json:"bestTimeAsBigBrawler"`
+    Club            	 PlayerClub 	`json:"club"`
+    Brawlers        	 []OwnedBrawler `json:"brawlers"`
 }
 
 type PlayerResponse struct {
@@ -29,19 +39,10 @@ type BattleLogResponse struct {
 }
 
 type OwnedBrawler struct {
-  	ID       string 	  `json:"id"`
-   	Name     string 	  `json:"name"`
-    Stats    BrawlerStats `json:"stats"`
-}
-
-type PlayerClub struct {
-  	Tag  string `json:"tag"`
-   	Name string `json:"name"`
-}
-
-type BrawlerStats struct {
-  	Power           int 		`json:"power"`
-   	Rank            int 		`json:"rank"`
+  	ID       		int 	  	`json:"id"`
+   	Name     		string 	    `json:"name"`
+   	Power           int 		`json:"power"`
+    Rank            int 		`json:"rank"`
     Trophies        int 		`json:"trophies"`
     HighestTrophies int 		`json:"highestTrophies"`
     Gears           []Gear 		`json:"gears"`
@@ -49,29 +50,24 @@ type BrawlerStats struct {
     Gadgets         []Gadget 	`json:"gadgets"`
 }
 
+type PlayerClub struct {
+  	Tag  string `json:"tag"`
+   	Name string `json:"name"`
+}
+
+
 type Gear struct {
   	ID    int 	 `json:"id"`
    	Name  string `json:"name"`
     Level int 	 `json:"level"`
 }
 type PlayerIcon struct {
-	ID string `json:"id"`
+	ID int `json:"id"`
 }
 
-type Stats struct {
-  	Trophies             int `json:"trophies"`
-   	HighestTrophies      int `json:"highestTrophies"`
-    ExpLevel             int `json:"expLevel"`
-    ExpPoints            int `json:"expPoints"`
-    TeamVictories        int `json:"3vs3Victories"`
-    SoloVictories        int `json:"soloVictories"`
-  	DuoVictories         int `json:"duoVictories"`
-	BestRumbleTime       int `json:"bestRoboRumbleTime"`
-	BestTimeAsBigBrawler int `json:"bestTimeAsBigBrawler"`
-}
 
 func (c *Client) GetPlayer(tag string) (*Player, error) {
-	req, err := http.NewRequest("GET", "https://api.brawlstars.com/v1/players/%23" + tag, nil)
+	req, err := http.NewRequest("GET", fmt.Sprintf("https://bsproxy.royaleapi.dev/v1/players/%s", url.PathEscape(tag)), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -91,7 +87,7 @@ func (c *Client) GetPlayer(tag string) (*Player, error) {
 }
 
 func (c *Client) GetPlayerBattlelog(tag string) (*[]Battle, error){
-	req, err := http.NewRequest("GET", "https://api.brawlstars.com/v1/players/%23" + tag + "/battlelog", nil)
+	req, err := http.NewRequest("GET", fmt.Sprintf("https://bsproxy.royaleapi.dev/v1/players/%s/battlelog", url.PathEscape(tag)), nil)
 	if err != nil {
 		return nil, err
 	}

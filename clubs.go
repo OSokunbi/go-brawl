@@ -35,7 +35,7 @@ type ClubMember struct {
 }
 
 func (c *Client) GetClub(tag string) (*Club, error) {
-	url := fmt.Sprintf("https://api.brawlstars.com/v1/clubs/%s", url.PathEscape(tag))
+	url := fmt.Sprintf("https://bsproxy.royaleapi.dev/v1/clubs/%s", url.PathEscape(tag))
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, err
@@ -59,7 +59,7 @@ func (c *Client) GetClub(tag string) (*Club, error) {
 }
 
 func (c *Client) GetClubMembers(tag string) ([]ClubMember, error) {
-	url := fmt.Sprintf("https://api.brawlstars.com/v1/clubs/%s/members", url.PathEscape(tag))
+	url := fmt.Sprintf("https://bsproxy.royaleapi.dev/v1/clubs/%s/members", url.PathEscape(tag))
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, err

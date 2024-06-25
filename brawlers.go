@@ -37,7 +37,7 @@ func NewClient(token string) *Client {
 }
 
 func (c *Client) GetBrawlers() ([]Brawler, error) {
-	req, err := http.NewRequest("GET", "https://api.brawlstars.com/v1/brawlers", nil)
+	req, err := http.NewRequest("GET", "https://bsproxy.royaleapi.dev/v1/brawlers", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -60,7 +60,7 @@ func (c *Client) GetBrawlers() ([]Brawler, error) {
 }
 
 func (c *Client) GetBrawler(id int) (*Brawler, error) {
-	req, err := http.NewRequest("GET", fmt.Sprintf("https://api.brawlstars.com/v1/brawlers/%d", id), nil)
+	req, err := http.NewRequest("GET", fmt.Sprintf("https://bsproxy.royaleapi.dev/v1/brawlers/%d", id), nil)
 	if err != nil {
 		return nil, err
 	}
