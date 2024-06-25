@@ -1,44 +1,52 @@
 package brawlstars
 
 import (
-	"net/http"
 	"encoding/json"
+	"fmt"
+	"net/http"
 )
 
-type CountryLeaderboardPlayers struct {
-	Players []LeaderboardPlayer
+type CountryLeaderboardResponse struct {
+	Items  []LeaderboardPlayer `json:"items"`
+	Paging struct {
+		Cursors struct{} `json:"cursors"`
+	} `json:"paging"`
 }
 
 type LeaderboardPlayer struct {
-	Tag  	  string
-	Name 	  string
-	NameColor string
-	Icon      PlayerIcon
-	Trophies  int
-	Rank      int
-	Club      LeaderBoardPlayerClub
+	Tag       string           `json:"tag"`
+	Name      string           `json:"name"`
+	NameColor string           `json:"nameColor"`
+	Icon      PlayerIcon       `json:"icon"`
+	Trophies  int              `json:"trophies"`
+	Rank      int              `json:"rank"`
+	Club      *LeaderboardClub `json:"club,omitempty"`
 }
 
-type LeaderBoardPlayerClub struct {
-	Name string
+type LeaderboardClub struct {
+	Name string `json:"name"`
 }
 
-func (c *Client) GetCountryLeaderboardPlayers(countryCode string) (*CountryLeaderboardPlayers, error) {
-	req, err := http.NewRequest("GET", "https://api.brawlstars.com/v1/rankings/" + countryCode + "/players", nil)
+func (c *Client) GetCountryLeaderboardPlayers(countryCode string) ([]LeaderboardPlayer, error) {
+	url := fmt.Sprintf("https://api.brawlstars.com/v1/rankings/%s/players", countryCode)
+	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set("Authorization", "Bearer " + c.token)
+	req.Header.Set("Authorization", "Bearer "+c.token)
+
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
 	}
 	defer resp.Body.Close()
-	var countryLeaderboard CountryLeaderboardPlayers
-	err = json.NewDecoder(resp.Body).Decode(&countryLeaderboard)
+
+	var leaderboardResp CountryLeaderboardResponse
+	err = json.NewDecoder(resp.Body).Decode(&leaderboardResp)
 	if err != nil {
 		return nil, err
 	}
-	return &countryLeaderboard, nil
+
+	return leaderboardResp.Items, nil
 }

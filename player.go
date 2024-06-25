@@ -5,55 +5,69 @@ import (
 	"encoding/json"
 )
 type Player struct {
-	Tag             string
-	Name            string
-  	NameColor       string
-   	Icon            PlayerIcon
-    Stats           Stats
-    Club            PlayerClub
-    Brawlers        []OwnedBrawler
+	Tag             string 		   `json:"tag"`
+	Name            string 		   `json:"name"`
+  	NameColor       string 		   `json:"nameColor"`
+   	Icon            PlayerIcon 	   `json:"icon"`
+    Stats           Stats 		   `json:"stats"`
+    Club            PlayerClub 	   `json:"club"`
+    Brawlers        []OwnedBrawler `json:"brawlers"`
+}
+
+type PlayerResponse struct {
+	Player Player `json:"items"`
+	Paging struct {
+		Cursors struct{} `json:"cursors"`
+	} `json:"paging"`
+}
+
+type BattleLogResponse struct {
+	BattleLogs []Battle `json:"items"`
+	Paging struct {
+		Cursors struct{} `json:"cursors"`
+	} `json:"paging"`
 }
 
 type OwnedBrawler struct {
-  	ID       string
-   	Name     string  
-    Stats    BrawlerStats
+  	ID       string 	  `json:"id"`
+   	Name     string 	  `json:"name"`
+    Stats    BrawlerStats `json:"stats"`
 }
 
 type PlayerClub struct {
-  	Tag  string
-   	Name string
+  	Tag  string `json:"tag"`
+   	Name string `json:"name"`
 }
 
 type BrawlerStats struct {
-  	Power           int
-   	Rank            int
-    Trophies        int
-    HighestTrophies int
-    Gears           []Gear
-    StarPowers      []StarPower
-    Gadgets         []Gadget
+  	Power           int 		`json:"power"`
+   	Rank            int 		`json:"rank"`
+    Trophies        int 		`json:"trophies"`
+    HighestTrophies int 		`json:"highestTrophies"`
+    Gears           []Gear 		`json:"gears"`
+    StarPowers      []StarPower `json:"starPowers"`
+    Gadgets         []Gadget 	`json:"gadgets"`
 }
 
 type Gear struct {
-  	ID    int
-   	Name  string
-    Level int
+  	ID    int 	 `json:"id"`
+   	Name  string `json:"name"`
+    Level int 	 `json:"level"`
 }
 type PlayerIcon struct {
-	ID string
+	ID string `json:"id"`
 }
 
 type Stats struct {
-  	Trophies             int
-   	HighestTrophies      int
-    ExpLevel             int
-    ExpPoints            int
-    TeamVictories        int
-    SoloVictories        int
-  	DuoVictories         int
-	BestRumbleTime       int
-	BestTimeAsBigBrawler int
+  	Trophies             int `json:"trophies"`
+   	HighestTrophies      int `json:"highestTrophies"`
+    ExpLevel             int `json:"expLevel"`
+    ExpPoints            int `json:"expPoints"`
+    TeamVictories        int `json:"3vs3Victories"`
+    SoloVictories        int `json:"soloVictories"`
+  	DuoVictories         int `json:"duoVictories"`
+	BestRumbleTime       int `json:"bestRoboRumbleTime"`
+	BestTimeAsBigBrawler int `json:"bestTimeAsBigBrawler"`
 }
 
 func (c *Client) GetPlayer(tag string) (*Player, error) {
@@ -76,7 +90,7 @@ func (c *Client) GetPlayer(tag string) (*Player, error) {
 	return &player, nil
 }
 
-func (c *Client) GetPlayerBattlelog(tag string) (*BattleLog, error){
+func (c *Client) GetPlayerBattlelog(tag string) (*[]Battle, error){
 	req, err := http.NewRequest("GET", "https://api.brawlstars.com/v1/players/%23" + tag + "/battlelog", nil)
 	if err != nil {
 		return nil, err
@@ -88,7 +102,7 @@ func (c *Client) GetPlayerBattlelog(tag string) (*BattleLog, error){
 		return nil, err
 	}
 	defer resp.Body.Close()
-	var battlelog BattleLog
+	var battlelog []Battle
 	err = json.NewDecoder(resp.Body).Decode(&battlelog)
 	if err != nil {
 		return nil, err
