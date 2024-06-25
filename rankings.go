@@ -29,7 +29,7 @@ type LeaderboardClub struct {
 	Name string `json:"name"`
 }
 
-func (c *Client) GetCountryLeaderboardPlayers(countryCode string) ([]LeaderboardPlayer, error) {
+func (c *Client) GetCountryLeaderboardPlayers(countryCode string) (Leaderboard, error) {
 	url := fmt.Sprintf("https://bsproxy.royaleapi.dev/v1/rankings/%s/players", countryCode)
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
