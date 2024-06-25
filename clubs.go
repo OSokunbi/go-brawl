@@ -29,7 +29,7 @@ type ClubMember struct {
 }
 
 func (c *Client) GetClub(tag string) (*Club, error) {
-	req, err := http.NewRequest("GET", "https://api.brawlstars.com/v1/clubs/" + tag, nil)
+	req, err := http.NewRequest("GET", "https://api.brawlstars.com/v1/clubs/%23" + tag, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -49,7 +49,7 @@ func (c *Client) GetClub(tag string) (*Club, error) {
 }
 
 func (c *Client) GetClubMembers(tag string) (*Members, error) {
-	req, err := http.NewRequest("GET", "https://api.brawlstars.com/v1/clubs/" + tag + "/members", nil)
+	req, err := http.NewRequest("GET", "https://api.brawlstars.com/v1/clubs/%23" + tag + "/members", nil)
 	if err != nil {
 		return nil, err
 	}

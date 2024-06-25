@@ -57,7 +57,7 @@ type Stats struct {
 }
 
 func (c *Client) GetPlayer(tag string) (*Player, error) {
-	req, err := http.NewRequest("GET", "https://api.brawlstars.com/v1/players/" + tag, nil)
+	req, err := http.NewRequest("GET", "https://api.brawlstars.com/v1/players/%23" + tag, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -77,7 +77,7 @@ func (c *Client) GetPlayer(tag string) (*Player, error) {
 }
 
 func (c *Client) GetPlayerBattlelog(tag string) (*BattleLog, error){
-	req, err := http.NewRequest("GET", "https://api.brawlstars.com/v1/players/" + tag + "/battlelog", nil)
+	req, err := http.NewRequest("GET", "https://api.brawlstars.com/v1/players/%23" + tag + "/battlelog", nil)
 	if err != nil {
 		return nil, err
 	}

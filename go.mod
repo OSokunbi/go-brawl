@@ -1,3 +1,3 @@
-module 8
+module go-brawl
 
 go 1.22.3

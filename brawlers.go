@@ -44,7 +44,7 @@ func (c *Client) GetBrawlers () (*[]Brawler, error) {
 }
 
 func (c *Client) GetBrawler (id string) (*Brawler, error) {
-	req, err := http.NewRequest("GET", "https://api.brawlstars.com/v1/brawlers/" + id, nil)
+	req, err := http.NewRequest("GET", "https://api.brawlstars.com/v1/brawlers/%23" + id, nil)
 	if err != nil {
 		return nil, err
 	}
