@@ -7,11 +7,13 @@ import (
 )
 
 type CountryLeaderboardResponse struct {
-	Items  []LeaderboardPlayer `json:"items"`
+	Leaderboard  Leaderboard `json:"items"`
 	Paging struct {
 		Cursors struct{} `json:"cursors"`
 	} `json:"paging"`
 }
+
+type Leaderboard []LeaderboardPlayer
 
 type LeaderboardPlayer struct {
 	Tag       string           `json:"tag"`
@@ -48,5 +50,23 @@ func (c *Client) GetCountryLeaderboardPlayers(countryCode string) ([]Leaderboard
 		return nil, err
 	}
 
-	return leaderboardResp.Items, nil
+	return leaderboardResp.Leaderboard, nil
+}
+
+func (lb *Leaderboard) GetPlayerByTag(tag string) (*LeaderboardPlayer, error) {
+	for _, player := range *lb {
+		if player.Tag == tag {
+			return &player, nil
+		}
+	}
+	return nil, fmt.Errorf("player with tag %s not found", tag)
+}
+
+func (lb *Leaderboard) GetPlayerByRank(rank int) (*LeaderboardPlayer, error) {
+	for _, player := range *lb {
+		if player.Rank == rank {
+			return &player, nil
+		}
+	}
+	return nil, fmt.Errorf("player with rank %d not found", rank)
 }

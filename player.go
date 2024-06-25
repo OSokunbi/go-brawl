@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"strings"
 )
 type Player struct {
 	Tag             	 string 		`json:"tag"`
@@ -97,4 +98,22 @@ func (c *Client) GetPlayerBattlelog(tag string) (*[]Battle, error){
 		return nil, err
 	}
 	return &battlelog.BattleLogs, nil
+}
+
+func (p *Player) GetBrawler(id int) *OwnedBrawler {
+	for _, brawler := range p.Brawlers {
+		if brawler.ID == id {
+			return &brawler
+		}
+	}
+	return nil
+}
+
+func (p *Player) GetBrawlerByName(name string) *OwnedBrawler {
+	for _, brawler := range p.Brawlers {
+		if strings.ToLower(name) == strings.ToLower(brawler.Name) {
+			return &brawler
+		}
+	}
+	return nil
 }

@@ -81,3 +81,72 @@ func (c *Client) GetClubMembers(tag string) ([]ClubMember, error) {
 
 	return clubMembersResp.Members, nil
 }
+
+func (c *Club) GetMembers() []ClubMember {
+	return c.Members
+}
+
+func (c *Club) GetMember(tag string) *ClubMember {
+	for _, member := range c.Members {
+		if member.Tag == tag {
+			return &member
+		}
+	}
+	return nil
+}
+
+func (c *Club) GetMemberByIndex(index int) *ClubMember {
+	if index >= 0 && index < len(c.Members) {
+		return &c.Members[index]
+	}
+	return nil
+}
+
+func (c *Club) GetMemberCount() int {
+	return len(c.Members)
+}
+
+func (c *Club) GetMemberTags() []string {
+	tags := make([]string, len(c.Members))
+	for i, member := range c.Members {
+		tags[i] = member.Tag
+	}
+	return tags
+}
+
+func (c *Club) GetMemberNames() []string {
+	names := make([]string, len(c.Members))
+	for i, member := range c.Members {
+		names[i] = member.Name
+	}
+	return names
+}
+
+func (c *Club) GetMemberByName(name string) *ClubMember {
+	for _, member := range c.Members {
+		if member.Name == name {
+			return &member
+		}
+	}
+	return nil
+}
+
+func (c *Club) GetMemberByRole(role string) []ClubMember {
+	members := make([]ClubMember, 0)
+	for _, member := range c.Members {
+		if member.Role == role {
+			members = append(members, member)
+		}
+	}
+	return members
+}	
+
+func (c *Club) GetMemberByTrophies(trophies int) []ClubMember {
+	members := make([]ClubMember, 0)
+	for _, member := range c.Members {
+		if member.Trophies >= trophies {
+			members = append(members, member)
+		}
+	}
+	return members
+}
