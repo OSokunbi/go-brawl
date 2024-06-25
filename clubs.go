@@ -122,15 +122,6 @@ func (c *Club) GetMemberNames() []string {
 	return names
 }
 
-func (c *Club) GetMemberByName(name string) *ClubMember {
-	for _, member := range c.Members {
-		if member.Name == name {
-			return &member
-		}
-	}
-	return nil
-}
-
 func (c *Club) GetMemberByRole(role string) []ClubMember {
 	members := make([]ClubMember, 0)
 	for _, member := range c.Members {
@@ -149,4 +140,20 @@ func (c *Club) GetMemberByTrophies(trophies int) []ClubMember {
 		}
 	}
 	return members
+}
+
+func (c *Client) GetMembersFullInfo(tag string) ([]Player, error) {
+	club, err := c.GetClub(tag)
+	if err != nil {
+		return nil, err
+	}
+	players := make([]Player, 0)
+	for _, member := range club.Members {
+		player, err := c.GetPlayer(member.Tag)
+		if err != nil {
+			return nil, err
+		}
+		players = append(players, *player)
+	}
+	return players, nil
 }

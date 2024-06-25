@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 )
 
 type Brawler struct {
@@ -30,10 +31,6 @@ type BrawlersResponse struct {
 			After string `json:"after"`
 		} `json:"cursors"`
 	} `json:"paging"`
-}
-
-func NewClient(token string) *Client {
-	return &Client{token: token}
 }
 
 func (c *Client) GetBrawlers() ([]Brawler, error) {
@@ -80,4 +77,19 @@ func (c *Client) GetBrawler(id int) (*Brawler, error) {
 	}
 
 	return &brawler, nil
+}
+
+func (c *Client) GetBrawlerByName(name string) (*Brawler, error) {
+	brawlers, err := c.GetBrawlers()
+	if err != nil {
+		return nil, err
+	}
+
+	for _, brawler := range brawlers {
+		if strings.ToLower(brawler.Name) == strings.ToLower(name) {
+			return &brawler, nil
+		}
+	}
+
+	return nil, fmt.Errorf("brawler not found")
 }

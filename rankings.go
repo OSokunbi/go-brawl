@@ -61,12 +61,3 @@ func (lb *Leaderboard) GetPlayerByTag(tag string) (*LeaderboardPlayer, error) {
 	}
 	return nil, fmt.Errorf("player with tag %s not found", tag)
 }
-
-func (lb *Leaderboard) GetPlayerByRank(rank int) (*LeaderboardPlayer, error) {
-	for _, player := range *lb {
-		if player.Rank == rank {
-			return &player, nil
-		}
-	}
-	return nil, fmt.Errorf("player with rank %d not found", rank)
-}
