@@ -2,6 +2,8 @@
 
 an unofficial brawl stars api wrapper for golang
 
+it is incomplete and still in development, feel free to contribute
+
 ## prerequisites
 
 - a brawl stars api token, you can get one [here](https://developer.brawlstars.com/#/)
