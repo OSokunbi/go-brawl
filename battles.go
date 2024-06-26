@@ -1,12 +1,5 @@
 package brawlstars
 
-import (
-	"encoding/json"
-	"fmt"
-	"net/http"
-	"net/url"
-)
-
 type BattleLogResponse struct {
 	BattleLogs []Battle `json:"items"`
 	Paging     struct {
@@ -27,18 +20,15 @@ type Event struct {
 }
 
 type BattleInfo struct {
-	Mode       string        `json:"mode"`
-	Type       string        `json:"type"`
-	Result     string        `json:"result"`
-	Duration   int           `json:"duration"`
-	StarPlayer *BattlePlayer `json:"starPlayer,omitempty"`
-	Teams      []Team        `json:"teams,omitempty"`
-	Players    []BattlePlayer `json:"players,omitempty"` // Added for solo modes
+	Mode       string        	`json:"mode"`
+	Type       string        	`json:"type"`
+	Result     string        	`json:"result"`
+	Duration   int           	`json:"duration"`
+	StarPlayer *BattlePlayer    `json:"starPlayer,omitempty"`
+	Teams      [][]BattlePlayer `json:"teams,omitempty"`
+	Players    []BattlePlayer   `json:"players,omitempty"` // Added for solo modes
 }
 
-type Team struct {
-	Players []BattlePlayer `json:"team"`
-}
 
 type BattlePlayer struct {
 	Tag     string        `json:"tag"`
@@ -51,30 +41,4 @@ type BattleBrawler struct {
 	Name     string `json:"name"`
 	Power    int    `json:"power"`
 	Trophies int    `json:"trophies"`
-}
-
-func (c *Client) GetPlayerBattlelog(tag string) ([]Battle, error) {
-	encodedTag := url.PathEscape(tag)
-	url := fmt.Sprintf("https://api.brawlstars.com/v1/players/%s/battlelog", encodedTag)
-	
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		return nil, err
-	}
-	req.Header.Set("Authorization", "Bearer "+c.token)
-	
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-	
-	var battlelogResp BattleLogResponse
-	err = json.NewDecoder(resp.Body).Decode(&battlelogResp)
-	if err != nil {
-		return nil, err
-	}
-	
-	return battlelogResp.BattleLogs, nil
 }

@@ -80,24 +80,31 @@ func (c *Client) GetPlayer(tag string) (*Player, error) {
 	return &player, nil
 }
 
-func (c *Client) GetPlayerBattlelog(tag string) (*[]Battle, error){
-	req, err := http.NewRequest("GET", fmt.Sprintf("https://bsproxy.royaleapi.dev/v1/players/%s/battlelog", url.PathEscape(tag)), nil)
+
+func (c *Client) GetPlayerBattlelog(tag string) ([]Battle, error) {
+	encodedTag := url.PathEscape(tag)
+	url := fmt.Sprintf("https://bsproxy.royaleapi.dev/v1/players/%s/battlelog", encodedTag)
+	
+	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set("Authorization", "Bearer " + c.token)
+	req.Header.Set("Authorization", "Bearer "+c.token)
+	
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
 	}
 	defer resp.Body.Close()
-	var battlelog BattleLogResponse
-	err = json.NewDecoder(resp.Body).Decode(&battlelog)
+	
+	var battlelogResp BattleLogResponse
+	err = json.NewDecoder(resp.Body).Decode(&battlelogResp)
 	if err != nil {
 		return nil, err
 	}
-	return &battlelog.BattleLogs, nil
+	
+	return battlelogResp.BattleLogs, nil
 }
 
 func (p *Player) GetBrawler(id int) *OwnedBrawler {
