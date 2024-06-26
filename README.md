@@ -8,6 +8,9 @@ it is incomplete and still in development, feel free to contribute
 
 - a brawl stars api token, you can get one [here](https://developer.brawlstars.com/#/)
 
+a proxy server is used to handle requests, when registering for an api token, you will need to provide the proxy server's ip address:
+`45.79.218.79`
+
 ## inatallation
 
 ```bash
